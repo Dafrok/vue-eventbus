@@ -7,8 +7,6 @@ export default {
       bus.$on(event, callback)
       return bus.off(event)
     }
-    Vue.prototype.$un = bus.$off
     Vue.prototype.$boardcast = bus.$emit
-    
   }
 }
