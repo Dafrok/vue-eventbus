@@ -1,12 +1,27 @@
-import Vue from 'vue'
+(function (global, factory) {
+    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('vue')) :
+    typeof define === 'function' && define.amd ? define(['vue'], factory) :
+    (global.vueEventbus = factory(global.Vue));
+}(this, function (Vue) { 'use strict';
 
-export default {
-  install (Vue, options) {
-    const bus = new Vue()
-    Vue.prototype.$listen = (event, callback) => {
-      bus.$on(event, callback)
-      return bus.off(event)
-    }
-    Vue.prototype.$boardcast = bus.$emit
-  }
-}
+    Vue = 'default' in Vue ? Vue['default'] : Vue;
+
+    var bus = new Vue();
+
+    var index = {
+        install: function install(Vue, options) {
+            Vue.prototype.$broadcast = function (event, payload) {
+                return bus.$emit(event, payload);
+            };
+            Vue.prototype.$listen = function (event, fn) {
+                return bus.$on(event, fn);
+            };
+            Vue.prototype.$deafen = function (event, fn) {
+                return bus.$off(event, fn);
+            };
+        }
+    };
+
+    return index;
+
+}));
